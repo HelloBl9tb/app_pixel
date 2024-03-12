@@ -1,0 +1,22 @@
+[package]
+name = "build_tools"
+authors.workspace = true
+description = "build.rs helpers for generating build info"
+edition.workspace = true
+include.workspace = true
+readme = "README.md"
+rust-version.workspace = true
+version.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+
+
+[dependencies]
+time = { workspace = true, features = ["formatting"] }
+anyhow.workspace = true
+cargo_metadata = "0.18.1"
+glob = "0.3.1"
+sha2 = "0.10.8"
+unindent = "0.2.3"
+walkdir = "2.5.0"
