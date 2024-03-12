@@ -1,0 +1,17 @@
+[package]
+name = "pixilation"
+authors.workspace = true
+description = "Pxie functions"
+edition.workspace = true
+include.workspace = true
+readme = "README.md"
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+serde.workspace = true
+image.workspace = true
+kurbo.workspace = true
+
+[build-dependencies]
+build_tools.workspace = true
