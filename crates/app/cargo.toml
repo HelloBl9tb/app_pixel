@@ -1,0 +1,19 @@
+[package]
+name = "app"
+authors.workspace = true
+description = "eframe"
+edition.workspace = true
+include.workspace = true
+readme = "README.md"
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+eframe.workspace = true
+egui-file-dialog.workspace = true
+egui.workspace = true
+egui_extras.workspace = true
+
+
+[build-dependencies]
+build_tools.workspace = true
