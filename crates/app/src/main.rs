@@ -1,10 +1,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::path::PathBuf;
+use std::path::*;
 use eframe::egui;
 use egui::{Image, ImageSource};
 use egui_file_dialog::{FileDialog};
-use egui_extras::*;
-
+// use egui_extras::*;
+use pixelation;
+use image::*;
 #[derive(Default)]
 struct MyApp {
     file_dialog: FileDialog,
@@ -36,8 +37,25 @@ impl eframe::App for MyApp {
             if let Some(path) = self.file_dialog.update(ctx).selected() {
                     self.selected_file = Some(path.to_path_buf());
                
-                    ui.image(format!("{:?}",path));
+                    ui.image(format!("{:?}",path.clone()));
                     ui.image(egui::include_image!(r"1.png"));
+                    //pixelation
+                    let image = image::open(path.clone());
+                    match image::open(path) {
+                        Ok(image) => {
+                            let vec_colors = pixelation::dominant_colors(image.clone()); 
+                            let sqauare = pixelation::generate_squares(10.0, image::open(path.clone()).unwrap());
+                            let line = pixelation::line(image.clone(), 10);
+                            let img_out = pixelation::paint_coordinats(sqauare.clone(), vec_colors.clone(), image.clone(), line.clone());
+                                image.save(r"C:\Project\Image\out_1.png").unwrap();
+                            ui.image(r"C:\Project\Image\out_1.png");
+                            
+                        }
+                        Err(err) => {
+                            
+                        }
+                    }
+                   
             }
            
         });

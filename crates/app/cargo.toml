@@ -13,6 +13,8 @@ eframe.workspace = true
 egui-file-dialog.workspace = true
 egui.workspace = true
 egui_extras.workspace = true
+image.workspace = true
+pixelation = { path = "../pixelation" }
 
 
 [build-dependencies]

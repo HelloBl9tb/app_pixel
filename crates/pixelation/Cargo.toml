@@ -1,5 +1,5 @@
 [package]
-name = "pixilation"
+name = "pixelation"
 authors.workspace = true
 description = "Pxie functions"
 edition.workspace = true
