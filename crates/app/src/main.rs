@@ -3,9 +3,7 @@ use std::path::*;
 use eframe::egui;
 use egui::{Image, ImageSource};
 use egui_file_dialog::{FileDialog};
-// use egui_extras::*;
 use pixelation;
-use image::*;
 #[derive(Default)]
 struct MyApp {
     file_dialog: FileDialog,
@@ -37,8 +35,8 @@ impl eframe::App for MyApp {
             if let Some(path) = self.file_dialog.update(ctx).selected() {
                     self.selected_file = Some(path.to_path_buf());
                
-                    ui.image(format!("{:?}",path.clone()));
-                    ui.image(egui::include_image!(r"1.png"));
+                    // ui.image(format!("{:?}",path.clone()));
+                    // ui.image(egui::include_image!(r"1.png"));
                     //pixelation
                     let image = image::open(path.clone());
                     match image::open(path) {
