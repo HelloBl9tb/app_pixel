@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::path::*;
 use eframe::egui;
-use egui::{Image, ImageSource};
+use egui::*;
 use egui_file_dialog::{FileDialog};
 use pixelation;
 #[derive(Default)]
@@ -27,35 +27,47 @@ impl eframe::App for MyApp {
                 // Open the file dialog to select a file.
                 self.file_dialog.select_file();
             }
-
+            
             ui.label(format!("Selected file: {:?}", self.selected_file
             ));
-           
+                      
             // Update the dialog and check if the user selected a file
             if let Some(path) = self.file_dialog.update(ctx).selected() {
                     self.selected_file = Some(path.to_path_buf());
                
-                    // ui.image(format!("{:?}",path.clone()));
-                    // ui.image(egui::include_image!(r"1.png"));
+                    // window 1
+                    ui.horizontal(|ui| { 
+                    ui.add( 
+                        egui::Image::new(format!("{:?}",path))
+                        .max_width(400.0)
+                        .max_height(400.0));
+                    
+
+                    
                     //pixelation
-                    let image = image::open(path.clone());
+                    let image = image::open(path);
                     match image::open(path) {
                         Ok(image) => {
+                            image.save(r"./1.png").unwrap();
                             let vec_colors = pixelation::dominant_colors(image.clone()); 
                             let sqauare = pixelation::generate_squares(10.0, image::open(path.clone()).unwrap());
                             let line = pixelation::line(image.clone(), 10);
                             let img_out = pixelation::paint_coordinats(sqauare.clone(), vec_colors.clone(), image.clone(), line.clone());
-                                image.save(r"C:\Project\Image\out_1.png").unwrap();
-                            ui.image(r"C:\Project\Image\out_1.png");
+                                img_out.clone().save(r".\out_1.png").unwrap();
+                            // window 2
+                            ui.add( 
+                                egui::Image::new(r".\out_1.png")
+                                .max_width(400.0)
+                                .max_height(400.0));
                             
                         }
                         Err(err) => {
                             
                         }
                     }
-                   
+                });     
             }
-           
+            
         });
     }
 }
