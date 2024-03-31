@@ -19,12 +19,12 @@ build_tools = { path = "crates/build_tools", version = "=0.1.0-alpha.1", default
 app = { path = "crates/app", version = "=0.1.0-alpha.1", default-features = false }
 
 clap = { version = "4.5.4", features = ["derive"] }
-image = "0.25.0"
+image = "0.25.1"
 kurbo = "0.11.0"
-eframe = "0.26.0"
-egui-file-dialog = "0.3.1"
-egui = "0.15"
-egui_extras = "0.26.2"
+eframe = { version = "0.27.1", features = ["wgpu"] }
+egui-file-dialog = "0.5.0"
+egui = "0.27.1"
+egui_extras = "0.27.1"
 
 # Serde
 serde = { version = "1.0.197", features = ["derive", "default"] }
