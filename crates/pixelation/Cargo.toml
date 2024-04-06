@@ -8,10 +8,12 @@ readme = "README.md"
 rust-version.workspace = true
 version.workspace = true
 
+
 [dependencies]
 serde.workspace = true
 image.workspace = true
 kurbo.workspace = true
+mysql_async.workspace = true
 
 [build-dependencies]
 build_tools.workspace = true
