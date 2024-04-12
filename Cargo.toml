@@ -18,15 +18,26 @@ pixilation = { path = "crates/pixelation", version = "=0.1.0-alpha.1", default-f
 build_tools = { path = "crates/build_tools", version = "=0.1.0-alpha.1", default-features = false }
 app = { path = "crates/app", version = "=0.1.0-alpha.1", default-features = false }
 
+tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread"] }
 clap = { version = "4.5.4", features = ["derive"] }
 image = "0.25.1"
 kurbo = "0.11.0"
-eframe = { version = "0.27.1", features = ["wgpu"] }
+eframe = { version = "0.27.2", features = ["wgpu"] }
 egui-file-dialog = "0.5.0"
-egui = "0.27.1"
-egui_extras = "0.27.1"
-mysql_async = "0.23"
-sqlx = "0.7.4"
+egui = "0.27.2"
+egui_extras = "0.27.2"
+
+sqlx = { version = "0.7.4", features = [
+    "runtime-tokio",
+    "tls-rustls",
+    "uuid",
+    "postgres",
+    "time",
+    "json",
+    "migrate",
+    "macros",
+    "chrono",
+] }
 
 # Serde
 serde = { version = "1.0.197", features = ["derive", "default"] }
@@ -53,7 +64,7 @@ strum = "0.26.2"
 strum_macros = "0.26.2"
 bytes = "1.6.0"
 lazy_static = "1.4.0"
-validator = "0.17.0"
+validator = "0.18.1"
 itertools = "0.12.1"
 
 [profile.dev]

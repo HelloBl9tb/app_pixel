@@ -1,9 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::path::*;
+use anyhow::Ok;
+use app::{config::Config, database};
 use eframe::egui;
-use egui::*;
-use egui_file_dialog::{FileDialog};
+use egui_file_dialog::FileDialog;
 use pixelation;
+use std::{path::*, sync::Arc};
 
 // use mysql_async::{prelude::*, Conn, Opts, OptsBuilder};
 #[derive(Default)]
@@ -29,62 +30,72 @@ impl eframe::App for MyApp {
                 // Open the file dialog to select a file.
                 self.file_dialog.select_file();
             }
-            
-            ui.label(format!("Selected file: {:?}", self.selected_file
-            ));
-                      
+
+            ui.label(format!("Selected file: {:?}", self.selected_file));
+
             // Update the dialog and check if the user selected a file
             if let Some(path) = self.file_dialog.update(ctx).selected() {
-                    self.selected_file = Some(path.to_path_buf());
-               
-                    // window 1
-                    // horizontal image
-                    ui.horizontal(|ui|{
-                        ui.vertical(|ui| { 
-                            ui.add( 
-                                egui::Image::new(format!("{:?}",path))
-                                .max_width(400.0)
-                                .max_height(400.0));
-                            ui.label( "Image in");
-                    });
-                    
-                    
+                self.selected_file = Some(path.to_path_buf());
 
-                    
+                // window 1
+                // horizontal image
+                ui.horizontal(|ui| {
+                    ui.vertical(|ui| {
+                        ui.add(
+                            egui::Image::new(format!("{:?}", path))
+                                .max_width(400.0)
+                                .max_height(400.0),
+                        );
+                        ui.label("Image in");
+                    });
+
                     //pixelation
                     let image = image::open(path);
                     match image::open(path) {
                         Ok(image) => {
                             image.save(r"./1.png").unwrap();
-                            let vec_colors = pixelation::dominant_colors(image.clone()); 
-                            let sqauare = pixelation::generate_squares(10.0, image::open(path.clone()).unwrap());
+                            let vec_colors = pixelation::dominant_colors(image.clone());
+                            let sqauare = pixelation::generate_squares(
+                                10.0,
+                                image::open(path.clone()).unwrap(),
+                            );
                             let line = pixelation::line(image.clone(), 10);
-                            let img_out = pixelation::paint_coordinats(sqauare.clone(), vec_colors.clone(), image.clone(), line.clone());
-                                img_out.clone().save(r".\out_1.png").unwrap();
+                            let img_out = pixelation::paint_coordinats(
+                                sqauare.clone(),
+                                vec_colors.clone(),
+                                image.clone(),
+                                line.clone(),
+                            );
+                            img_out.clone().save(r".\out_1.png").unwrap();
                             // window 2
-                            ui.vertical(|ui| { 
-                            ui.add( 
-                                egui::Image::new(r".\out_1.png")
-                                .max_width(400.0)
-                                .max_height(400.0));
-                            ui.label( "Image out");
-                        });
+                            ui.vertical(|ui| {
+                                ui.add(
+                                    egui::Image::new(r".\out_1.png")
+                                        .max_width(400.0)
+                                        .max_height(400.0),
+                                );
+                                ui.label("Image out");
+                            });
                         }
-                        Err(err) => {
-                            
-                        }
+                        Err(err) => {}
                     }
-                });     
+                });
             }
-            
         });
     }
 }
 
-fn main() -> eframe::Result<()> {
+#[tokio::main]
+async fn main() -> eframe::Result<(), anyhow::Error> {
+    let config = Arc::new(Config::load()?);
+    let db = database::connect(&config.database).await?;
+    database::migrate(&db).await?;
+
     eframe::run_native(
         "Pixelation",
         eframe::NativeOptions::default(),
         Box::new(|ctx| Box::new(MyApp::new(ctx))),
-    )
+    );
+
+    Ok(())
 }
