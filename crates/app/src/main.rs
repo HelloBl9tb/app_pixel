@@ -1,5 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use anyhow::Ok;
+use anyhow::Result;
 use app::{config::Config, database};
 use eframe::egui;
 use egui_file_dialog::FileDialog;
@@ -11,7 +11,9 @@ use std::{path::*, sync::Arc};
 struct MyApp {
     file_dialog: FileDialog,
     selected_file: Option<PathBuf>,
+  
 }
+
 
 impl MyApp {
     pub fn new(_cc: &eframe::CreationContext) -> Self {
@@ -19,6 +21,7 @@ impl MyApp {
             // Create a new file dialog object
             file_dialog: FileDialog::new(),
             selected_file: None,
+            
         }
     }
 }
@@ -76,6 +79,7 @@ impl eframe::App for MyApp {
                                 );
                                 ui.label("Image out");
                             });
+                            
                         }
                         Err(err) => {}
                     }
