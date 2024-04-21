@@ -18,7 +18,7 @@ pixilation = { path = "crates/pixelation", version = "=0.1.0-alpha.1", default-f
 build_tools = { path = "crates/build_tools", version = "=0.1.0-alpha.1", default-features = false }
 app = { path = "crates/app", version = "=0.1.0-alpha.1", default-features = false }
 
-tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread", "full"] }
 clap = { version = "4.5.4", features = ["derive"] }
 image = "0.25.1"
 kurbo = "0.11.0"

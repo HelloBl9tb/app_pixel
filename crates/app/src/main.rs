@@ -1,10 +1,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use anyhow::Result;
-use app::{config::Config, database};
+use app::{config::Config, database, models};
 use eframe::egui;
 use egui_file_dialog::FileDialog;
 use pixelation;
 use std::{path::*, sync::Arc};
+
 
 // use mysql_async::{prelude::*, Conn, Opts, OptsBuilder};
 #[derive(Default)]
