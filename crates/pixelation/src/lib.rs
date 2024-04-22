@@ -1,5 +1,7 @@
 use image::*;
 use kurbo::*;
+use base64::{encode, decode};
+
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Square {
@@ -196,4 +198,8 @@ pub fn format_color(
     }
 
     string
+}
+
+pub fn decode_image(encoded_image: &str) -> Result<Vec<u8>, base64::DecodeError> {
+    decode(encoded_image)
 }

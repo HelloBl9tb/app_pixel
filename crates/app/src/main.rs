@@ -4,7 +4,8 @@ use app::{config::Config, database, models};
 use eframe::egui;
 use egui_file_dialog::FileDialog;
 use pixelation;
-use std::{path::*, sync::Arc};
+use std::{path::*, sync::Arc, fs::File, io::Read};
+
 
 
 // use mysql_async::{prelude::*, Conn, Opts, OptsBuilder};
@@ -80,6 +81,8 @@ impl eframe::App for MyApp {
                                 );
                                 ui.label("Image out");
                             });
+                           
+                            
                             
                         }
                         Err(err) => {}
@@ -95,6 +98,16 @@ async fn main() -> eframe::Result<(), anyhow::Error> {
     let config = Arc::new(Config::load()?);
     let db = database::connect(&config.database).await?;
     database::migrate(&db).await?;
+    let img_out = image::open(r"out_1.png");
+    let image_name = "img_out".to_string();
+    let image_name_1 = "img_out_1".to_string();
+    // let decode = pixelation::decode_image(r"C:\Project\app_pixel\out_1.png");
+    
+
+    
+    models::Image::create( &image_name, vec![] , &db).await?;
+    // models::Image::update( 2,&image_name_1, &vec.clone(), &db).await?;
+    // models::Image::delete( &db, 3).await?;
 
     eframe::run_native(
         "Pixelation",
