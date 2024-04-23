@@ -21,7 +21,8 @@ impl Image {
             .bind(image_name)
             .bind(image_data)
             .fetch_one(pool)
-            .await
+            .await?;
+        Ok(())
     }
 
     pub async fn update(id: i32, image_name: &str, image_data: &[u8], pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {

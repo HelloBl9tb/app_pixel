@@ -130,8 +130,8 @@ impl eframe::App for MyApp {
 
 #[tokio::main]
 async fn main() -> eframe::Result<(), anyhow::Error> {
-    const  config = Arc::new(Config::load()?);
-    const  db = database::connect(&config.database).await?;
+    let config = Arc::new(Config::load()?);
+    let db = database::connect(&config.database).await?;
     database::migrate(&db).await?;
     // let img_out = image::open(r"out_1.png");
     let image_name = "img_out".to_string();
