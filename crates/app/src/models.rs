@@ -15,20 +15,6 @@ pub struct Image {
 }
 
 impl Image {
-
-    // async fn load_image_from_file(file_path: &str) -> Result<Image, Error> {
-    //     let path = Path::new(file_path);
-    //     let image_data = fs::read(path).await?;
-    //     let image = image::load_from_memory(&image_data)?;
-    //     let (width, height) = image.dimensions();
-    //     let image_data: Vec<u8> = image.into_raw();
-    //     let image_name = path.file_name().unwrap().to_str().unwrap().to_string();
-    //     Ok(Image {
-    //         id: 0,
-    //         image_name,
-    //         image_data,
-    //     })
-    // }
   
     pub async fn create(image_name: &str, image_data: Vec<u8>, pool: &sqlx::PgPool) -> Result<Self, sqlx::Error> {
         sqlx::query_as::<_, Image>("INSERT INTO images (image_name, image_data) VALUES ($1, $2) RETURNING *")

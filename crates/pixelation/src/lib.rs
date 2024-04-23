@@ -1,6 +1,7 @@
 use image::*;
 use kurbo::*;
-use base64::{encode, decode};
+use base64::{encode, decode, DecodeError };
+use tokio::task;
 
 
 #[derive(Clone, Debug, PartialEq)]
@@ -201,5 +202,5 @@ pub fn format_color(
 }
 
 pub fn decode_image(encoded_image: &str) -> Result<Vec<u8>, base64::DecodeError> {
-    decode(encoded_image)
+    base64::decode(encoded_image)
 }

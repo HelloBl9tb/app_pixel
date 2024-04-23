@@ -13,6 +13,7 @@ use std::{path::*, sync::Arc, fs::File, io::Read};
 struct MyApp {
     file_dialog: FileDialog,
     selected_file: Option<PathBuf>,
+    
   
 }
 
@@ -31,6 +32,10 @@ impl MyApp {
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
+
+            
+       
+            
             if ui.button("Select file").clicked() {
                 // Open the file dialog to select a file.
                 self.file_dialog.select_file();
@@ -83,10 +88,40 @@ impl eframe::App for MyApp {
                             });
                            
                             
-                            
                         }
                         Err(err) => {}
                     }
+                });
+                // button db
+                ui.horizontal(|ui| {
+
+                    ui.horizontal(|ui| {
+                        if ui.button("push db").clicked() {
+                        //     let config = Arc::new(Config::load().unwrap());
+                        // let db = database::connect(&config.database).await.unwrap();
+                             // Open the file dialog to select a file.
+                             // self.file_dialog.select_file();
+                             
+                            //  models::Image::create( &image_name, vec![], &db).await?;
+                         }
+                        if ui.button("push db").clicked() {
+                            //     let config = Arc::new(Config::load().unwrap());
+                            // let db = database::connect(&config.database).await.unwrap();
+                                 // Open the file dialog to select a file.
+                                 // self.file_dialog.select_file();
+                                 
+                                //  models::Image::create( &image_name, vec![], &db).await?;
+                             }
+                        if ui.button("push db").clicked() {
+                                //     let config = Arc::new(Config::load().unwrap());
+                                // let db = database::connect(&config.database).await.unwrap();
+                                     // Open the file dialog to select a file.
+                                     // self.file_dialog.select_file();
+                                     
+                                    //  models::Image::create( &image_name, vec![], &db).await?;
+                                 }
+                     });
+                    
                 });
             }
         });
@@ -95,17 +130,18 @@ impl eframe::App for MyApp {
 
 #[tokio::main]
 async fn main() -> eframe::Result<(), anyhow::Error> {
-    let config = Arc::new(Config::load()?);
-    let db = database::connect(&config.database).await?;
+    const  config = Arc::new(Config::load()?);
+    const  db = database::connect(&config.database).await?;
     database::migrate(&db).await?;
-    let img_out = image::open(r"out_1.png");
+    // let img_out = image::open(r"out_1.png");
     let image_name = "img_out".to_string();
     let image_name_1 = "img_out_1".to_string();
-    // let decode = pixelation::decode_image(r"C:\Project\app_pixel\out_1.png");
+    // let mut decode = pixelation::decode_image(r"C:\Project\app_pixel\out_1.png");
+    // println!("{:?}", decode);
     
 
     
-    models::Image::create( &image_name, vec![] , &db).await?;
+    // models::Image::create( &image_name, vec![], &db).await?;
     // models::Image::update( 2,&image_name_1, &vec.clone(), &db).await?;
     // models::Image::delete( &db, 3).await?;
 
