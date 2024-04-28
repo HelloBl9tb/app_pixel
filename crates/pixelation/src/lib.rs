@@ -1,8 +1,5 @@
 use image::*;
 use kurbo::*;
-use base64::{encode, decode, DecodeError };
-use tokio::task;
-
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Square {
@@ -77,7 +74,7 @@ pub fn line(img: DynamicImage, cell_size: usize) -> Vec<kurbo::Line> {
 
     //vertical
     for i in (0..width).step_by(cell_size) {
-        let mut line_1 = Line::new(
+        let line_1 = Line::new(
             Point::new(i as f64, 0.0),
             Point::new(i as f64, width as f64),
         );
@@ -85,23 +82,23 @@ pub fn line(img: DynamicImage, cell_size: usize) -> Vec<kurbo::Line> {
     }
     //horizontal
     for i in (0..height).step_by(cell_size) {
-        let mut line_1 = Line::new(
+        let line_1 = Line::new(
             Point::new(0.0, i as f64),
             Point::new(height as f64, i as f64),
         );
         vec_line.push(line_1);
     }
     //last vertical
-    for i in (0..width).step_by(cell_size) {
-        let mut line_1 = Line::new(
+    for _i in (0..width).step_by(cell_size) {
+        let line_1 = Line::new(
             Point::new(width as f64, 0.0),
             Point::new(width as f64, width as f64),
         );
         vec_line.push(line_1);
     }
     //last horizontal
-    for i in (0..height).step_by(cell_size) {
-        let mut line_1 = Line::new(
+    for _i in (0..height).step_by(cell_size) {
+        let line_1 = Line::new(
             Point::new(0.0, height as f64),
             Point::new(height as f64, height as f64),
         );

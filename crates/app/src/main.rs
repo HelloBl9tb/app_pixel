@@ -6,6 +6,7 @@ use pixelation;
 
 use std::{path::*, sync::Arc};
 
+#[allow(dead_code)]
 struct MyApp {
     file_dialog: FileDialog,
     selected_file: Option<PathBuf>,
@@ -49,15 +50,12 @@ impl eframe::App for MyApp {
                     });
 
                     //pixelation
-                    let image = image::open(path);
                     match image::open(path) {
                         Ok(image) => {
                             image.save(r"./1.png").unwrap();
                             let vec_colors = pixelation::dominant_colors(image.clone());
-                            let sqauare = pixelation::generate_squares(
-                                10.0,
-                                image::open(path.clone()).unwrap(),
-                            );
+                            let sqauare =
+                                pixelation::generate_squares(10.0, image::open(path).unwrap());
                             let line = pixelation::line(image.clone(), 10);
                             let img_out = pixelation::paint_coordinats(
                                 sqauare.clone(),
@@ -76,7 +74,7 @@ impl eframe::App for MyApp {
                                 ui.label("Image out");
                             });
                         }
-                        Err(err) => {}
+                        Err(_err) => {}
                     }
                 });
                 // button db
@@ -131,7 +129,7 @@ async fn main() -> eframe::Result<(), anyhow::Error> {
     let run_result = eframe::run_native(
         "Pixelation",
         eframe::NativeOptions::default(),
-        Box::new(move |ctx| Box::new(MyApp::new(db.clone()))),
+        Box::new(move |_ctx| Box::new(MyApp::new(db.clone()))),
     );
 
     if let Err(e) = run_result {
