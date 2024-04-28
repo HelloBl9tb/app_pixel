@@ -45,6 +45,7 @@ impl eframe::App for MyApp {
                     ui.vertical(|ui| {
                         match image::open(&path) {
                             Ok(image) => {
+                                println!("{:?}", image);
                                 // Image
                                 ui.label("Image in");
                             }
