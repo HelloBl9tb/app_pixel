@@ -41,11 +41,7 @@ impl eframe::App for MyApp {
                 // horizontal image
                 ui.horizontal(|ui| {
                     ui.vertical(|ui| {
-                        ui.add(
-                            egui::Image::new(format!("{:?}", path))
-                                .max_width(400.0)
-                                .max_height(400.0),
-                        );
+                        ui.add(egui::Image::new(format!("{:?}", path)).rounding(0.5));
                         ui.label("Image in");
                     });
 
