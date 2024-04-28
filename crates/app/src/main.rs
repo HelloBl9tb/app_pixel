@@ -1,7 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use app::{config::Config, database};
 use eframe::egui;
+use egui::TextureHandle;
 use egui_file_dialog::FileDialog;
+use image::GenericImageView;
 use pixelation;
 
 use std::{path::*, sync::Arc};
@@ -41,10 +43,17 @@ impl eframe::App for MyApp {
                 // horizontal image
                 ui.horizontal(|ui| {
                     ui.vertical(|ui| {
-                        ui.add(egui::Image::new(format!("{:?}", path)).rounding(0.5));
-                        ui.label("Image in");
+                        match image::open(&path) {
+                            Ok(image) => {
+                                // Image
+                                ui.label("Image in");
+                            }
+                            Err(error) => {
+                                eprintln!("Ошибка при загрузке изображения: {:?}", error);
+                                ui.label("Ошибка при загрузке изображения");
+                            }
+                        }
                     });
-
                     //pixelation
                     match image::open(path) {
                         Ok(image) => {
