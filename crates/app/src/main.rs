@@ -1,30 +1,23 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use anyhow::Result;
-use app::{config::Config, database, models};
+use app::{config::Config, database};
 use eframe::egui;
 use egui_file_dialog::FileDialog;
 use pixelation;
-use std::{path::*, sync::Arc, fs::File, io::Read};
 
+use std::{path::*, sync::Arc};
 
-
-// use mysql_async::{prelude::*, Conn, Opts, OptsBuilder};
-#[derive(Default)]
 struct MyApp {
     file_dialog: FileDialog,
     selected_file: Option<PathBuf>,
-    
-  
+    db: Arc<database::DB>,
 }
 
-
 impl MyApp {
-    pub fn new(_cc: &eframe::CreationContext) -> Self {
+    pub fn new(db: Arc<database::DB>) -> Self {
         Self {
-            // Create a new file dialog object
             file_dialog: FileDialog::new(),
             selected_file: None,
-            
+            db,
         }
     }
 }
@@ -32,10 +25,6 @@ impl MyApp {
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-
-            
-       
-            
             if ui.button("Select file").clicked() {
                 // Open the file dialog to select a file.
                 self.file_dialog.select_file();
@@ -86,42 +75,38 @@ impl eframe::App for MyApp {
                                 );
                                 ui.label("Image out");
                             });
-                           
-                            
                         }
                         Err(err) => {}
                     }
                 });
                 // button db
                 ui.horizontal(|ui| {
-
                     ui.horizontal(|ui| {
-                        if ui.button("push db").clicked() {
-                        //     let config = Arc::new(Config::load().unwrap());
-                        // let db = database::connect(&config.database).await.unwrap();
-                             // Open the file dialog to select a file.
-                             // self.file_dialog.select_file();
-                             
-                            //  models::Image::create( &image_name, vec![], &db).await?;
-                         }
                         if ui.button("push db").clicked() {
                             //     let config = Arc::new(Config::load().unwrap());
                             // let db = database::connect(&config.database).await.unwrap();
-                                 // Open the file dialog to select a file.
-                                 // self.file_dialog.select_file();
-                                 
-                                //  models::Image::create( &image_name, vec![], &db).await?;
-                             }
+                            // Open the file dialog to select a file.
+                            // self.file_dialog.select_file();
+
+                            //  models::Image::create( &image_name, vec![], &db).await?;
+                        }
                         if ui.button("push db").clicked() {
-                                //     let config = Arc::new(Config::load().unwrap());
-                                // let db = database::connect(&config.database).await.unwrap();
-                                     // Open the file dialog to select a file.
-                                     // self.file_dialog.select_file();
-                                     
-                                    //  models::Image::create( &image_name, vec![], &db).await?;
-                                 }
-                     });
-                    
+                            //     let config = Arc::new(Config::load().unwrap());
+                            // let db = database::connect(&config.database).await.unwrap();
+                            // Open the file dialog to select a file.
+                            // self.file_dialog.select_file();
+
+                            //  models::Image::create( &image_name, vec![], &db).await?;
+                        }
+                        if ui.button("push db").clicked() {
+                            //     let config = Arc::new(Config::load().unwrap());
+                            // let db = database::connect(&config.database).await.unwrap();
+                            // Open the file dialog to select a file.
+                            // self.file_dialog.select_file();
+
+                            //  models::Image::create( &image_name, vec![], &db).await?;
+                        }
+                    });
                 });
             }
         });
@@ -131,25 +116,28 @@ impl eframe::App for MyApp {
 #[tokio::main]
 async fn main() -> eframe::Result<(), anyhow::Error> {
     let config = Arc::new(Config::load()?);
-    let db = database::connect(&config.database).await?;
+    let db = Arc::new(database::connect(&config.database).await?);
     database::migrate(&db).await?;
     // let img_out = image::open(r"out_1.png");
-    let image_name = "img_out".to_string();
-    let image_name_1 = "img_out_1".to_string();
+    // let image_name = "img_out".to_string();
+    // let image_name_1 = "img_out_1".to_string();
     // let mut decode = pixelation::decode_image(r"C:\Project\app_pixel\out_1.png");
     // println!("{:?}", decode);
-    
 
-    
     // models::Image::create( &image_name, vec![], &db).await?;
     // models::Image::update( 2,&image_name_1, &vec.clone(), &db).await?;
     // models::Image::delete( &db, 3).await?;
 
-    eframe::run_native(
+    let run_result = eframe::run_native(
         "Pixelation",
         eframe::NativeOptions::default(),
-        Box::new(|ctx| Box::new(MyApp::new(ctx))),
+        Box::new(move |ctx| Box::new(MyApp::new(db.clone()))),
     );
+
+    if let Err(e) = run_result {
+        // Логирование ошибки
+        eprintln!("Failed to run eframe application: {:?}", e);
+    }
 
     Ok(())
 }
