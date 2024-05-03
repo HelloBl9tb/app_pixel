@@ -1,11 +1,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use app::{config::Config, database};
-use eframe::egui;
-use egui::TextureHandle;
+use eframe::egui::{Image,TextureId, TextureHandle};
+// use egui::TextureHandle;
 use egui_file_dialog::FileDialog;
-use image::GenericImageView;
+use image::{GenericImageView,ImageBuffer};
 use pixelation;
-
+use std::io::Read;
 use std::{path::*, sync::Arc};
 
 #[allow(dead_code)]
@@ -23,6 +23,13 @@ impl MyApp {
             db,
         }
     }
+}
+
+fn load_image(path: &str) -> Vec<u8> {
+    let mut file = std::fs::File::open(path).expect("Failed to open file");
+    let mut buf = Vec::new();
+    file.read_to_end(&mut buf).expect("Failed to read file");
+    buf
 }
 
 impl eframe::App for MyApp {
@@ -45,7 +52,10 @@ impl eframe::App for MyApp {
                     ui.vertical(|ui| {
                         match image::open(&path) {
                             Ok(image) => {
-                                println!("{:?}", image);
+                               
+                                ui.add(
+                                    egui::Image::new("https://picsum.photos/seed/1.759706314/1024").rounding(10.0),
+                                );
                                 // Image
                                 ui.label("Image in");
                             }
@@ -86,7 +96,7 @@ impl eframe::App for MyApp {
                 // button db
                 ui.horizontal(|ui| {
                     ui.horizontal(|ui| {
-                        if ui.button("push db").clicked() {
+                        if ui.button("Push DB").clicked() {
                             //     let config = Arc::new(Config::load().unwrap());
                             // let db = database::connect(&config.database).await.unwrap();
                             // Open the file dialog to select a file.
@@ -94,7 +104,7 @@ impl eframe::App for MyApp {
 
                             //  models::Image::create( &image_name, vec![], &db).await?;
                         }
-                        if ui.button("push db").clicked() {
+                        if ui.button("Update id DB").clicked() {
                             //     let config = Arc::new(Config::load().unwrap());
                             // let db = database::connect(&config.database).await.unwrap();
                             // Open the file dialog to select a file.
@@ -102,7 +112,7 @@ impl eframe::App for MyApp {
 
                             //  models::Image::create( &image_name, vec![], &db).await?;
                         }
-                        if ui.button("push db").clicked() {
+                        if ui.button("Delete id DB").clicked() {
                             //     let config = Arc::new(Config::load().unwrap());
                             // let db = database::connect(&config.database).await.unwrap();
                             // Open the file dialog to select a file.
@@ -122,11 +132,9 @@ async fn main() -> eframe::Result<(), anyhow::Error> {
     let config = Arc::new(Config::load()?);
     let db = Arc::new(database::connect(&config.database).await?);
     database::migrate(&db).await?;
-    // let img_out = image::open(r"out_1.png");
-    // let image_name = "img_out".to_string();
-    // let image_name_1 = "img_out_1".to_string();
+   
     // let mut decode = pixelation::decode_image(r"C:\Project\app_pixel\out_1.png");
-    // println!("{:?}", decode);
+   
 
     // models::Image::create( &image_name, vec![], &db).await?;
     // models::Image::update( 2,&image_name_1, &vec.clone(), &db).await?;
